@@ -297,44 +297,91 @@ export default function AdminDashboard() {
                                         />
                                     )}
                                 </div>
-                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                    <input
-                                        placeholder="Image URL"
-                                        value={editingItem.image || ''}
-                                        onChange={e => setEditingItem({ ...editingItem, image: e.target.value })}
-                                        style={{ padding: '0.5rem', flex: 1 }}
-                                    />
-                                    <label className="btn btn-secondary" style={{ cursor: 'pointer' }}>
-                                        Upload
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                    <label style={{ fontSize: '0.9rem', fontWeight: 'bold' }}>Image</label>
+                                    <div style={{ display: 'flex', gap: '0.5rem' }}>
                                         <input
-                                            type="file"
-                                            accept="image/*"
-                                            style={{ display: 'none' }}
-                                            onChange={async (e) => {
-                                                const file = e.target.files?.[0];
-                                                if (!file) return;
-
-                                                const formData = new FormData();
-                                                formData.append('file', file);
-
-                                                try {
-                                                    const res = await fetch('/api/upload', {
-                                                        method: 'POST',
-                                                        body: formData
-                                                    });
-                                                    if (res.ok) {
-                                                        const data = await res.json();
-                                                        setEditingItem(prev => ({ ...prev, image: data.url }));
-                                                    } else {
-                                                        alert('Upload failed');
-                                                    }
-                                                } catch (err) {
-                                                    console.error(err);
-                                                    alert('Upload failed');
+                                            placeholder="Paste image URL (Google Drive, ImgBB, etc.) or upload below"
+                                            value={editingItem.image || ''}
+                                            onChange={e => setEditingItem({ ...editingItem, image: e.target.value })}
+                                            style={{ padding: '0.5rem', flex: 1 }}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            onClick={() => {
+                                                const url = editingItem.image || '';
+                                                // Check if it's a Google Drive link
+                                                const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                                                if (driveMatch) {
+                                                    const fileId = driveMatch[1];
+                                                    const directUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                                                    setEditingItem({ ...editingItem, image: directUrl });
+                                                    alert('✅ Converted to direct Google Drive link!');
+                                                } else if (url.includes('drive.google.com')) {
+                                                    alert('❌ Invalid Google Drive link format. Make sure it contains /file/d/FILE_ID/');
+                                                } else {
+                                                    alert('ℹ️ This is not a Google Drive link. No conversion needed.');
                                                 }
                                             }}
-                                        />
-                                    </label>
+                                            style={{ whiteSpace: 'nowrap' }}
+                                        >
+                                            🔄 Convert Drive Link
+                                        </button>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                        <label className="btn btn-secondary" style={{ cursor: 'pointer', margin: 0 }}>
+                                            📤 Upload to Firebase
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                style={{ display: 'none' }}
+                                                onChange={async (e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (!file) return;
+
+                                                    const formData = new FormData();
+                                                    formData.append('file', file);
+
+                                                    try {
+                                                        const res = await fetch('/api/upload', {
+                                                            method: 'POST',
+                                                            body: formData
+                                                        });
+                                                        if (res.ok) {
+                                                            const data = await res.json();
+                                                            setEditingItem(prev => ({ ...prev, image: data.url }));
+                                                            alert('Image uploaded successfully!');
+                                                        } else {
+                                                            alert('Upload failed');
+                                                        }
+                                                    } catch (err) {
+                                                        console.error(err);
+                                                        alert('Upload failed');
+                                                    }
+                                                }}
+                                            />
+                                        </label>
+                                        <span style={{ fontSize: '0.8rem', color: '#888' }}>or paste URL above</span>
+                                    </div>
+                                    {editingItem.image && (
+                                        <div style={{ marginTop: '0.5rem' }}>
+                                            <p style={{ fontSize: '0.8rem', color: '#888', margin: '0 0 0.5rem 0' }}>Preview:</p>
+                                            <img
+                                                src={editingItem.image}
+                                                alt="Preview"
+                                                style={{
+                                                    maxWidth: '200px',
+                                                    maxHeight: '200px',
+                                                    borderRadius: '8px',
+                                                    border: '1px solid #333'
+                                                }}
+                                                onError={(e) => {
+                                                    (e.target as HTMLImageElement).style.display = 'none';
+                                                }}
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                     <input

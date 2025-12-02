@@ -27,15 +27,35 @@ To connect the application to Firebase, follow these steps:
     ```
     *   Click "Publish".
 
-4.  **Get Configuration**:
+4.  **Enable Firebase Storage** (Required for Image Uploads):
+    *   In the Firebase Console, go to **Storage** (in the left sidebar under "Build").
+    *   Click **Get Started**.
+    *   Start in **Test mode** for development (or configure proper rules).
+    *   Choose the same location as your Firestore database.
+    *   Click **Done**.
+    *   Go to the **Rules** tab and update to allow writes:
+    ```
+    rules_version = '2';
+    service firebase.storage {
+      match /b/{bucket}/o {
+        match /{allPaths=**} {
+          allow read: if true;
+          allow write: if true; // Allow for now, secure later with admin auth
+        }
+      }
+    }
+    ```
+    *   Click **Publish**.
+
+5.  **Get Configuration**:
     *   Go to Project Settings (gear icon > Project settings).
     *   Scroll down to "Your apps".
     *   Click the Web icon (`</>`) to create a web app.
     *   Register the app (you don't need Firebase Hosting yet).
     *   Copy the `firebaseConfig` object values.
 
-4.  **Configure Environment Variables**:
-    *   Create a file named `.env.local` in the root of your project (`c:/Users/arshe/OneDrive/Documents/web_project/`).
+6.  **Configure Environment Variables**:
+    *   Create a file named `.env.local` in the root of your project.
     *   Add the following content, replacing the values with your actual Firebase config:
 
 ```env
@@ -47,9 +67,12 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 ```
 
-5.  **Restart the Server**:
+7.  **Restart the Server**:
     *   Stop the running server (Ctrl+C).
     *   Run `npm run dev` again.
 
 ## Data Migration
 The application is configured to automatically upload your local `data.json` to Firestore if the database is empty upon the first write operation or you can trigger it manually.
+
+## Image Uploads
+Images are now stored in Firebase Storage instead of the local file system, which ensures they persist after deployment to serverless platforms like Vercel.

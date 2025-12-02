@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
 import { validateAdminAuth, validateFileUpload, rateLimit, getClientIdentifier } from '@/lib/security';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { initializeApp, getApps } from 'firebase/app';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
+// Initialize Firebase (only if not already initialized)
+const firebaseConfig = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+};
+
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+const storage = getStorage(app);
 
 export async function POST(request: NextRequest) {
     try {
@@ -52,22 +65,19 @@ export async function POST(request: NextRequest) {
             .slice(0, 100);
 
         // Create a unique filename with timestamp
-        const filename = `${Date.now()}-${sanitizedName}`;
-        const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-        const filepath = path.join(uploadDir, filename);
+        const filename = `menu-images/${Date.now()}-${sanitizedName}`;
 
-        // Ensure upload directory exists
-        try {
-            await mkdir(uploadDir, { recursive: true });
-        } catch (err) {
-            // Directory might already exist
-        }
+        // Upload to Firebase Storage
+        const storageRef = ref(storage, filename);
+        await uploadBytes(storageRef, buffer, {
+            contentType: file.type,
+        });
 
-        // Write file
-        await writeFile(filepath, buffer);
+        // Get the download URL
+        const downloadURL = await getDownloadURL(storageRef);
 
         return NextResponse.json({
-            url: `/uploads/${filename}`,
+            url: downloadURL,
             success: true
         });
     } catch (error) {
