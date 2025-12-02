@@ -1,0 +1,800 @@
+{
+  "menu": [
+    {
+      "id": "101",
+      "name": "Chicken Stripes",
+      "description": "Crispy broasted chicken stripes",
+      "price": 12,
+      "category": "Broasted Chicken",
+      "image": "https://loremflickr.com/800/600/fried,chicken",
+      "available": true
+    },
+    {
+      "id": "102",
+      "name": "Loaded Fries",
+      "description": "Crispy fries topped with cheese and sauces",
+      "price": 8,
+      "category": "Fries",
+      "image": "https://loremflickr.com/800/600/fries,cheese",
+      "available": true
+    },
+    {
+      "id": "103",
+      "name": "Hamburger",
+      "description": "Juicy beef patty with fresh toppings",
+      "price": 10,
+      "category": "Burgers",
+      "image": "https://loremflickr.com/800/600/burger",
+      "available": true
+    },
+    {
+      "id": "104",
+      "name": "Nashville Burger",
+      "description": "Spicy fried chicken burger",
+      "price": 12,
+      "category": "Burgers",
+      "image": "https://loremflickr.com/800/600/spicy,burger",
+      "available": true
+    },
+    {
+      "id": "105",
+      "name": "Classic Burger",
+      "description": "The original classic burger",
+      "price": 10,
+      "category": "Burgers",
+      "image": "https://loremflickr.com/800/600/cheeseburger",
+      "available": true
+    },
+    {
+      "id": "106",
+      "name": "Tacos",
+      "description": "Authentic street tacos",
+      "price": 10,
+      "category": "Tacos",
+      "image": "https://loremflickr.com/800/600/tacos",
+      "available": true
+    },
+    {
+      "id": "107",
+      "name": "Loaded Chips",
+      "description": "Crunchy chips with savory toppings",
+      "price": 6,
+      "category": "Sides",
+      "image": "https://loremflickr.com/800/600/nachos",
+      "available": true
+    },
+    {
+      "id": "201",
+      "name": "Triple Chocolate Brownie",
+      "description": "Rich and fudgy triple chocolate brownie",
+      "price": 6,
+      "category": "Brownies",
+      "image": "https://loremflickr.com/800/600/brownie",
+      "available": true
+    },
+    {
+      "id": "202",
+      "name": "Classic Brownie",
+      "description": "Traditional chocolate brownie",
+      "price": 5,
+      "category": "Brownies",
+      "image": "https://loremflickr.com/800/600/chocolate,brownie",
+      "available": true
+    },
+    {
+      "id": "203",
+      "name": "Nutella Brownie",
+      "description": "Brownie topped with luscious Nutella",
+      "price": 6,
+      "category": "Brownies",
+      "image": "https://loremflickr.com/800/600/nutella,cake",
+      "available": true
+    },
+    {
+      "id": "204",
+      "name": "Lotus Biscoff Brownie",
+      "description": "Brownie with Lotus Biscoff spread",
+      "price": 6,
+      "category": "Brownies",
+      "image": "https://loremflickr.com/800/600/cake",
+      "available": true
+    },
+    {
+      "id": "205",
+      "name": "Rose Tresleche",
+      "description": "Milk cake infused with rose flavor",
+      "price": 7,
+      "category": "Tresleche",
+      "image": "https://loremflickr.com/800/600/cake,rose",
+      "available": true
+    },
+    {
+      "id": "206",
+      "name": "Badam Tresleche",
+      "description": "Almond flavored milk cake",
+      "price": 7,
+      "category": "Tresleche",
+      "image": "https://loremflickr.com/800/600/cake,almond",
+      "available": true
+    },
+    {
+      "id": "207",
+      "name": "Triple Chocolate Lava Cup",
+      "description": "Molten chocolate lava cake",
+      "price": 7,
+      "category": "Lava Cups",
+      "image": "https://loremflickr.com/800/600/chocolate,lava",
+      "available": true
+    },
+    {
+      "id": "208",
+      "name": "Classic Lava Cup",
+      "description": "Classic molten lava cake",
+      "price": 6,
+      "category": "Lava Cups",
+      "image": "https://loremflickr.com/800/600/lava,cake",
+      "available": true
+    },
+    {
+      "id": "301",
+      "name": "Green Apple Mojito",
+      "description": "Refreshing green apple mint drink",
+      "price": 5,
+      "category": "Mojitos",
+      "image": "https://loremflickr.com/800/600/mojito,green",
+      "available": true
+    },
+    {
+      "id": "302",
+      "name": "Blue Curacao Mojito",
+      "description": "Exotic blue curacao mocktail",
+      "price": 5,
+      "category": "Mojitos",
+      "image": "https://loremflickr.com/800/600/blue,cocktail",
+      "available": true
+    },
+    {
+      "id": "303",
+      "name": "Watermelon Mojito",
+      "description": "Fresh watermelon mojito",
+      "price": 5,
+      "category": "Mojitos",
+      "image": "https://loremflickr.com/800/600/watermelon,drink",
+      "available": true
+    },
+    {
+      "id": "304",
+      "name": "Cola",
+      "description": "Chilled cola",
+      "price": 3,
+      "category": "Beverages",
+      "image": "https://loremflickr.com/800/600/cola,drink",
+      "available": true
+    }
+  ],
+  "offers": [
+    {
+      "itemIds": [
+        "1764615070199",
+        "101",
+        "102"
+      ],
+      "title": "new trending offer",
+      "description": "eafw",
+      "id": "1764615091792",
+      "active": true
+    }
+  ],
+  "location": {
+    "name": "mariyagiri",
+    "address": "mariyagiri",
+    "openTime": "11:00",
+    "closeTime": "20:00",
+    "isOnline": true,
+    "coordinates": {
+      "lat": 40.7128,
+      "lng": -74.006
+    },
+    "nextOnlineTime": "2:00 pm",
+    "phone": "+91 98765 43210",
+    "instagram": "@foodtruck"
+  },
+  "orders": [
+    {
+      "id": "1764610054722",
+      "customerName": "arshekh",
+      "items": [
+        {
+          "id": "1",
+          "name": "The Classic Smash",
+          "price": 12,
+          "quantity": 1
+        }
+      ],
+      "total": 12,
+      "status": "completed",
+      "createdAt": "2025-12-01T17:27:34.722Z"
+    },
+    {
+      "id": "1764612609296",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "1",
+          "name": "The Classic Smash",
+          "price": 12,
+          "quantity": 2
+        }
+      ],
+      "total": 24,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:10:09.296Z"
+    },
+    {
+      "id": "1764612649743",
+      "customerName": "mini",
+      "items": [
+        {
+          "id": "3",
+          "name": "Truffle Fries",
+          "price": 6,
+          "quantity": 1
+        },
+        {
+          "id": "1",
+          "name": "The Classic Smash",
+          "price": 12,
+          "quantity": 1
+        }
+      ],
+      "total": 18,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:10:49.743Z"
+    },
+    {
+      "id": "1764612686633",
+      "customerName": "nooo",
+      "items": [
+        {
+          "id": "4",
+          "name": "Street Tacos",
+          "price": 10,
+          "quantity": 2
+        }
+      ],
+      "total": 20,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:11:26.633Z"
+    },
+    {
+      "id": "1764612963076",
+      "customerName": "Arshekh",
+      "items": [
+        {
+          "id": "2",
+          "name": "Spicy Chicken",
+          "price": 19,
+          "quantity": 1
+        },
+        {
+          "id": "3",
+          "name": "Truffle Fries",
+          "price": 6,
+          "quantity": 1
+        }
+      ],
+      "total": 25,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:16:03.076Z",
+      "notes": "no onions"
+    },
+    {
+      "id": "1764613687025",
+      "customerName": "Arshekh",
+      "items": [
+        {
+          "id": "1",
+          "name": "The Classic Smash",
+          "price": 12,
+          "quantity": 1
+        }
+      ],
+      "total": 12,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:28:07.025Z",
+      "notes": "extra sauce"
+    },
+    {
+      "id": "1764613959120",
+      "customerName": "Arshekh john",
+      "items": [
+        {
+          "id": "2",
+          "name": "Spicy Chicken",
+          "price": 19,
+          "quantity": 1
+        },
+        {
+          "id": "3",
+          "name": "Truffle Fries",
+          "price": 6,
+          "quantity": 1
+        }
+      ],
+      "total": 25,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:32:39.120Z",
+      "notes": "onion extra"
+    },
+    {
+      "id": "1764614088348",
+      "customerName": "Arshekh john ",
+      "items": [
+        {
+          "id": "3",
+          "name": "Truffle Fries",
+          "price": 6,
+          "quantity": 1
+        }
+      ],
+      "total": 6,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:34:48.348Z",
+      "notes": ""
+    },
+    {
+      "id": "1764614116117",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "4",
+          "name": "Street Tacos",
+          "price": 10,
+          "quantity": 5
+        }
+      ],
+      "total": 50,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:35:16.117Z",
+      "notes": ""
+    },
+    {
+      "id": "1764614662004",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "4",
+          "name": "Street Tacos",
+          "price": 10,
+          "quantity": 4
+        }
+      ],
+      "total": 40,
+      "status": "completed",
+      "createdAt": "2025-12-01T18:44:22.004Z",
+      "notes": ""
+    },
+    {
+      "id": "1764615654324",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "3",
+          "name": "Truffle Fries",
+          "price": 6,
+          "quantity": 1
+        }
+      ],
+      "total": 6,
+      "status": "completed",
+      "createdAt": "2025-12-01T19:00:54.324Z",
+      "notes": ""
+    },
+    {
+      "id": "1764615821452",
+      "customerName": "gfs",
+      "items": [
+        {
+          "id": "3",
+          "name": "Truffle Fries",
+          "price": 6,
+          "quantity": 4
+        }
+      ],
+      "total": 24,
+      "status": "completed",
+      "createdAt": "2025-12-01T19:03:41.452Z",
+      "notes": ""
+    },
+    {
+      "id": "1764615969486",
+      "customerName": "dwdw",
+      "items": [
+        {
+          "id": "2",
+          "name": "Spicy Chicken",
+          "price": 19,
+          "quantity": 1
+        }
+      ],
+      "total": 19,
+      "status": "completed",
+      "createdAt": "2025-12-01T19:06:09.486Z",
+      "notes": ""
+    },
+    {
+      "id": "1764618167943",
+      "customerName": "arshekh",
+      "items": [
+        {
+          "id": "304",
+          "name": "Cola",
+          "price": 3,
+          "quantity": 1
+        },
+        {
+          "id": "302",
+          "name": "Blue Curacao Mojito",
+          "price": 5,
+          "quantity": 1
+        },
+        {
+          "id": "101",
+          "name": "Chicken Stripes",
+          "price": 12,
+          "quantity": 1
+        },
+        {
+          "id": "102",
+          "name": "Loaded Fries",
+          "price": 8,
+          "quantity": 1
+        }
+      ],
+      "total": 28,
+      "status": "completed",
+      "createdAt": "2025-12-01T19:42:47.943Z",
+      "notes": ""
+    },
+    {
+      "id": "1764619769880",
+      "customerName": "arshekh",
+      "items": [
+        {
+          "id": "103",
+          "name": "Hamburger",
+          "price": 10,
+          "quantity": 1
+        },
+        {
+          "id": "101",
+          "name": "Chicken Stripes",
+          "price": 12,
+          "quantity": 1
+        },
+        {
+          "id": "206",
+          "name": "Badam Tresleche",
+          "price": 7,
+          "quantity": 1
+        },
+        {
+          "id": "102",
+          "name": "Loaded Fries",
+          "price": 8,
+          "quantity": 3
+        }
+      ],
+      "total": 53,
+      "status": "completed",
+      "createdAt": "2025-12-01T20:09:29.880Z",
+      "notes": "kkkk"
+    },
+    {
+      "id": "1764620538338",
+      "customerName": "arshekh",
+      "items": [
+        {
+          "id": "103",
+          "name": "Hamburger",
+          "price": 10,
+          "quantity": 3
+        },
+        {
+          "id": "102",
+          "name": "Loaded Fries",
+          "price": 8,
+          "quantity": 4
+        }
+      ],
+      "total": 62,
+      "status": "completed",
+      "createdAt": "2025-12-01T20:22:18.338Z",
+      "notes": ""
+    },
+    {
+      "id": "1764642918785",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "101-offer",
+          "name": "Chicken Stripes",
+          "price": 0,
+          "quantity": 1
+        },
+        {
+          "id": "102-offer",
+          "name": "Loaded Fries",
+          "price": 0,
+          "quantity": 1
+        }
+      ],
+      "total": 0,
+      "status": "completed",
+      "createdAt": "2025-12-02T02:35:18.785Z",
+      "notes": ""
+    },
+    {
+      "id": "1764642982621",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "102",
+          "name": "Loaded Fries",
+          "price": 8,
+          "quantity": 1
+        },
+        {
+          "id": "101-offer",
+          "name": "Chicken Stripes",
+          "price": 0,
+          "quantity": 1
+        },
+        {
+          "id": "102-offer",
+          "name": "Loaded Fries",
+          "price": 0,
+          "quantity": 1
+        }
+      ],
+      "total": 8,
+      "status": "completed",
+      "createdAt": "2025-12-02T02:36:22.621Z",
+      "notes": ""
+    },
+    {
+      "id": "1764643343868",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "102",
+          "name": "Loaded Fries",
+          "price": 8,
+          "quantity": 1
+        },
+        {
+          "id": "101-offer",
+          "name": "Chicken Stripes",
+          "price": 0,
+          "quantity": 1
+        },
+        {
+          "id": "102-offer",
+          "name": "Loaded Fries",
+          "price": 0,
+          "quantity": 1
+        }
+      ],
+      "total": 8,
+      "status": "completed",
+      "createdAt": "2025-12-02T02:42:23.868Z",
+      "notes": ""
+    },
+    {
+      "id": "1764644730708",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "102",
+          "name": "Loaded Fries",
+          "price": 8,
+          "quantity": 2
+        }
+      ],
+      "total": 16,
+      "status": "completed",
+      "createdAt": "2025-12-02T03:05:30.708Z",
+      "notes": ""
+    },
+    {
+      "id": "1764645062540",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "101",
+          "name": "Chicken Stripes",
+          "price": 12,
+          "quantity": 1
+        }
+      ],
+      "total": 12,
+      "status": "completed",
+      "createdAt": "2025-12-02T03:11:02.540Z",
+      "notes": ""
+    },
+    {
+      "id": "1764645073688",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "101",
+          "name": "Chicken Stripes",
+          "price": 12,
+          "quantity": 2
+        }
+      ],
+      "total": 24,
+      "status": "completed",
+      "createdAt": "2025-12-02T03:11:13.688Z",
+      "notes": ""
+    },
+    {
+      "id": "1764646104909",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "201",
+          "name": "Triple Chocolate Brownie",
+          "price": 6,
+          "quantity": 3
+        }
+      ],
+      "total": 18,
+      "status": "completed",
+      "createdAt": "2025-12-02T03:28:24.909Z",
+      "notes": ""
+    },
+    {
+      "id": "1764646962442",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "304",
+          "name": "Cola",
+          "price": 3,
+          "quantity": 4
+        }
+      ],
+      "total": 12,
+      "status": "completed",
+      "createdAt": "2025-12-02T03:42:42.442Z",
+      "notes": ""
+    },
+    {
+      "id": "1764647002097",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "101-offer",
+          "name": "Chicken Stripes",
+          "price": 0,
+          "quantity": 1
+        },
+        {
+          "id": "102-offer",
+          "name": "Loaded Fries",
+          "price": 0,
+          "quantity": 1
+        }
+      ],
+      "total": 0,
+      "status": "completed",
+      "createdAt": "2025-12-02T03:43:22.097Z",
+      "notes": ""
+    },
+    {
+      "id": "1764647126761",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "304",
+          "name": "Cola",
+          "price": 3,
+          "quantity": 1
+        }
+      ],
+      "total": 3,
+      "status": "completed",
+      "createdAt": "2025-12-02T03:45:26.761Z",
+      "notes": ""
+    },
+    {
+      "id": "1764648308124",
+      "customerName": "john",
+      "items": [
+        {
+          "id": "203",
+          "name": "Nutella Brownie",
+          "price": 6,
+          "quantity": 3
+        }
+      ],
+      "total": 18,
+      "status": "completed",
+      "createdAt": "2025-12-02T04:05:08.124Z",
+      "notes": ""
+    },
+    {
+      "id": "1764648692743",
+      "customerName": "Arshekh",
+      "items": [
+        {
+          "id": "101",
+          "name": "Chicken Stripes",
+          "price": 12,
+          "quantity": 1
+        },
+        {
+          "id": "103",
+          "name": "Hamburger",
+          "price": 10,
+          "quantity": 1
+        }
+      ],
+      "total": 22,
+      "status": "completed",
+      "createdAt": "2025-12-02T04:11:32.743Z",
+      "notes": ""
+    },
+    {
+      "id": "1764649048132",
+      "customerName": "Arshekh",
+      "items": [
+        {
+          "id": "101",
+          "name": "Chicken Stripes",
+          "price": 12,
+          "quantity": 1
+        },
+        {
+          "id": "303",
+          "name": "Watermelon Mojito",
+          "price": 5,
+          "quantity": 1
+        },
+        {
+          "id": "304",
+          "name": "Cola",
+          "price": 3,
+          "quantity": 1
+        },
+        {
+          "id": "301",
+          "name": "Green Apple Mojito",
+          "price": 5,
+          "quantity": 1
+        }
+      ],
+      "total": 25,
+      "status": "completed",
+      "createdAt": "2025-12-02T04:17:28.132Z",
+      "notes": ""
+    },
+    {
+      "id": "1764649421995",
+      "customerName": "Arshekh",
+      "items": [
+        {
+          "id": "105",
+          "name": "Classic Burger",
+          "price": 10,
+          "quantity": 3
+        }
+      ],
+      "total": 30,
+      "status": "completed",
+      "createdAt": "2025-12-02T04:23:41.995Z",
+      "notes": ""
+    }
+  ]
+}
