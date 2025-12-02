@@ -1,25 +1,17 @@
 import Header from '@/components/Header';
 import HomeClient from '@/components/HomeClient';
 import HeroCarousel from '@/components/HeroCarousel';
-import Link from 'next/link';
-import Image from 'next/image';
+import { getMenu } from '@/lib/db';
 
 // Force dynamic rendering to always get fresh data
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-    // Fetch from API to ensure fresh data with cache busting
-    const timestamp = Date.now();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/menu?t=${timestamp}`, {
-        cache: 'no-store',
-        headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-        },
-    });
-    const menu = await res.json();
+    // Fetch directly from database to ensure fresh data
+    const menu = await getMenu();
 
-    // Select a few items for the carousel (e.g., top 5 or specific ones)
+    // Select a few items for the carousel
     const featuredItems = menu.slice(0, 5);
 
     return (

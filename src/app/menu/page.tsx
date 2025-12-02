@@ -1,21 +1,14 @@
 import Navbar from '@/components/Navbar';
 import MenuGrid from '@/components/MenuGrid';
-import { MenuItem } from '@/lib/types';
+import { getMenu } from '@/lib/db';
 
 // Force dynamic rendering to always get fresh data
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function MenuPage() {
-    // Fetch from API to ensure fresh data with cache busting
-    const timestamp = Date.now();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/menu?t=${timestamp}`, {
-        cache: 'no-store',
-        headers: {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-        },
-    });
-    const menu: MenuItem[] = await res.json();
+    // Fetch directly from database to ensure fresh data
+    const menu = await getMenu();
 
     // Group by category
     const categories = Array.from(new Set(menu.map(item => item.category)));
