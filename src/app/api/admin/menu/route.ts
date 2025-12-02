@@ -44,6 +44,7 @@ export async function DELETE(request: NextRequest) {
     try {
         // Verify admin authentication
         if (!validateAdminAuth(request)) {
+            console.error('[DELETE] Unauthorized attempt');
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
@@ -51,6 +52,7 @@ export async function DELETE(request: NextRequest) {
         const clientId = getClientIdentifier(request);
         const { allowed } = rateLimit(clientId);
         if (!allowed) {
+            console.error('[DELETE] Rate limit exceeded');
             return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
         }
 
@@ -58,13 +60,22 @@ export async function DELETE(request: NextRequest) {
         const id = searchParams.get('id');
 
         if (!id || typeof id !== 'string' || id.length > 50) {
+            console.error('[DELETE] Invalid ID:', id);
             return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
         }
 
+        console.log('[DELETE] Attempting to delete menu item:', id);
+
         await deleteMenuItem(id);
-        return createSecureResponse({ success: true });
+
+        console.log('[DELETE] Successfully deleted menu item:', id);
+
+        return createSecureResponse({ success: true, deletedId: id });
     } catch (error) {
-        console.error('Menu delete error:', error);
-        return NextResponse.json({ error: 'Failed to delete item' }, { status: 500 });
+        console.error('[DELETE] Menu delete error:', error);
+        return NextResponse.json({
+            error: 'Failed to delete item',
+            details: error instanceof Error ? error.message : 'Unknown error'
+        }, { status: 500 });
     }
 }
