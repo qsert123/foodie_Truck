@@ -20,6 +20,15 @@ export function middleware(request: NextRequest) {
         response.headers.set(key, value);
     });
 
+    // Add aggressive cache control for menu and home pages
+    const path = request.nextUrl.pathname;
+    if (path === '/' || path === '/menu' || path === '/home') {
+        response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        response.headers.set('Pragma', 'no-cache');
+        response.headers.set('Expires', '0');
+    }
+
+
     // Check admin authentication for admin routes
     if (request.nextUrl.pathname.startsWith('/admin/dashboard')) {
         const adminToken = request.cookies.get('admin_token');

@@ -57,23 +57,37 @@ export async function seedFromLocal(): Promise<void> {
 
 // --- Menu Functions ---
 export async function getMenu(): Promise<MenuItem[]> {
+    console.log('[getMenu] Starting...');
+    console.log('[getMenu] Firebase initialized:', isFirebaseInitialized);
+
     if (!isFirebaseInitialized) {
+        console.warn('[getMenu] Firebase NOT initialized - using local data');
         const local = await getLocalData();
         return local?.menu || [];
     }
+
     try {
+        console.log('[getMenu] Fetching from Firebase...');
         const snapshot = await getDocs(collection(db, COL_MENU));
+        console.log('[getMenu] Firebase returned', snapshot.size, 'items');
+
         if (snapshot.empty) {
-            // Auto-seed if empty
+            console.warn('[getMenu] Firebase collection is empty - seeding...');
             await seedFromLocal();
             const retry = await getDocs(collection(db, COL_MENU));
+            console.log('[getMenu] After seeding:', retry.size, 'items');
             return retry.docs.map(d => d.data() as MenuItem);
         }
-        return snapshot.docs.map(d => d.data() as MenuItem);
+
+        const items = snapshot.docs.map(d => d.data() as MenuItem);
+        console.log('[getMenu] Successfully fetched', items.length, 'items from Firebase');
+        return items;
     } catch (e) {
-        console.error("Firebase error", e);
-        const local = await getLocalData();
-        return local?.menu || [];
+        console.error('[getMenu] Firebase error:', e);
+        console.error('[getMenu] Error details:', JSON.stringify(e, null, 2));
+
+        // Instead of silently falling back, throw the error so we can see what's wrong
+        throw new Error(`Failed to fetch menu from Firebase: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
 }
 
