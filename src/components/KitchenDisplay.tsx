@@ -68,25 +68,12 @@ export default function KitchenDisplay() {
 
                     <p style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>{order.customerName}</p>
 
-                    {order.items.some(item => item.id.endsWith('-offer')) && (
-                        <div style={{
-                            background: 'rgba(220, 20, 60, 0.1)',
-                            color: 'var(--primary)',
-                            padding: '0.5rem',
-                            borderRadius: '4px',
-                            marginBottom: '0.5rem',
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            border: '1px solid var(--primary)'
-                        }}>
-                            🔥 Offer Applied
-                        </div>
-                    )}
+
 
                     <ul style={{ listStyle: 'none', padding: 0, marginBottom: '1rem' }}>
                         {order.items.map((item, idx) => (
-                            <li key={idx} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem', color: item.id.endsWith('-offer') ? 'var(--primary)' : '#ccc' }}>
-                                <span>{item.quantity}x {item.name} {item.id.endsWith('-offer') && '(Offer)'}</span>
+                            <li key={idx} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem', color: '#ccc' }}>
+                                <span>{item.quantity}x {item.name}</span>
                             </li>
                         ))}
                     </ul>

@@ -130,12 +130,7 @@ export default function AdminDashboard() {
                 >
                     Update Location
                 </button>
-                <button
-                    className={`btn ${activeTab === 'offer' ? 'btn-primary' : 'btn-secondary'}`}
-                    onClick={() => setActiveTab('offer')}
-                >
-                    Special Offers
-                </button>
+
                 <a
                     href="/menu"
                     target="_blank"
@@ -437,120 +432,7 @@ export default function AdminDashboard() {
                 </form>
             )}
 
-            {activeTab === 'offer' && (
-                <div>
-                    <button
-                        className="btn btn-primary"
-                        style={{ marginBottom: '1rem' }}
-                        onClick={() => { setIsEditingOffer(true); setEditingOffer({}); }}
-                    >
-                        Add New Offer
-                    </button>
 
-                    {isEditingOffer && (
-                        <form onSubmit={handleSaveOffer} className="card" style={{ marginBottom: '2rem' }}>
-                            <h3>{editingOffer.id ? 'Edit Offer' : 'New Offer'}</h3>
-                            <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
-                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.2rem', fontWeight: 'bold' }}>
-                                    <input
-                                        type="checkbox"
-                                        checked={editingOffer.active ?? true}
-                                        onChange={e => setEditingOffer({ ...editingOffer, active: e.target.checked })}
-                                    />
-                                    Active
-                                </label>
-
-                                <label>
-                                    Title
-                                    <input
-                                        value={editingOffer.title || ''}
-                                        onChange={e => setEditingOffer({ ...editingOffer, title: e.target.value })}
-                                        style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                                        required
-                                    />
-                                </label>
-
-                                <label>
-                                    Description
-                                    <textarea
-                                        value={editingOffer.description || ''}
-                                        onChange={e => setEditingOffer({ ...editingOffer, description: e.target.value })}
-                                        style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                                        required
-                                    />
-                                </label>
-
-                                <label>
-                                    Discount Percentage (%)
-                                    <input
-                                        type="number"
-                                        min="0"
-                                        max="100"
-                                        value={editingOffer.discountPercentage || ''}
-                                        onChange={e => setEditingOffer({ ...editingOffer, discountPercentage: Number(e.target.value) })}
-                                        style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                                        required
-                                        placeholder="e.g. 20"
-                                    />
-                                </label>
-
-                                <div>
-                                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Select Items included in Offer:</label>
-                                    <div style={{ maxHeight: '300px', overflowY: 'auto', border: '1px solid #333', borderRadius: '4px' }}>
-                                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                                            <thead>
-                                                <tr style={{ background: '#333', textAlign: 'left' }}>
-                                                    <th style={{ padding: '0.5rem' }}>Select</th>
-                                                    <th style={{ padding: '0.5rem' }}>Food Item</th>
-                                                    <th style={{ padding: '0.5rem' }}>Price</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {menu.map(item => (
-                                                    <tr key={item.id} style={{ borderBottom: '1px solid #444' }}>
-                                                        <td style={{ padding: '0.5rem', textAlign: 'center' }}>
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={editingOffer.itemIds?.includes(item.id) || false}
-                                                                onChange={() => toggleOfferItem(item.id)}
-                                                            />
-                                                        </td>
-                                                        <td style={{ padding: '0.5rem' }}>{item.name}</td>
-                                                        <td style={{ padding: '0.5rem' }}>₹{item.price}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <div style={{ display: 'flex', gap: '1rem' }}>
-                                    <button type="submit" className="btn btn-primary">Save Offer</button>
-                                    <button type="button" className="btn btn-secondary" onClick={() => setIsEditingOffer(false)}>Cancel</button>
-                                </div>
-                            </div>
-                        </form>
-                    )}
-
-                    <div style={{ display: 'grid', gap: '1rem' }}>
-                        {offers.map(offer => (
-                            <div key={offer.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderLeft: offer.active ? '4px solid #4CAF50' : '4px solid #ccc' }}>
-                                <div>
-                                    <h4>{offer.title}</h4>
-                                    <p style={{ color: '#888' }}>{offer.description}</p>
-                                    <p style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>
-                                        {offer.discountPercentage}% OFF on {offer.itemIds?.length || 0} items
-                                    </p>
-                                </div>
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <button className="btn btn-secondary" onClick={() => { setEditingOffer(offer); setIsEditingOffer(true); }}>Edit</button>
-                                    <button className="btn btn-secondary" style={{ borderColor: 'red', color: 'red' }} onClick={() => handleDeleteOffer(offer.id)}>Delete</button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
