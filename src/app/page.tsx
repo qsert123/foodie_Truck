@@ -9,9 +9,13 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Home() {
-    // Fetch from API to ensure fresh data
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/menu`, {
+    // Fetch from API to ensure fresh data with cache busting
+    const timestamp = Date.now();
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/menu?t=${timestamp}`, {
         cache: 'no-store',
+        headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+        },
     });
     const menu = await res.json();
 

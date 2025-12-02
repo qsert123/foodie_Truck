@@ -59,9 +59,22 @@ export default function AdminDashboard() {
     };
 
     const handleDeleteItem = async (id: string) => {
-        if (!confirm('Are you sure?')) return;
-        await fetch(`/api/admin/menu?id=${id}`, { method: 'DELETE' });
-        fetchData();
+        if (!confirm('Are you sure you want to delete this item?')) return;
+
+        try {
+            const res = await fetch(`/api/admin/menu?id=${id}`, { method: 'DELETE' });
+
+            if (res.ok) {
+                alert('✅ Item deleted successfully!');
+                fetchData();
+            } else {
+                const error = await res.json();
+                alert(`❌ Failed to delete: ${error.error || 'Unknown error'}`);
+            }
+        } catch (err) {
+            console.error('Delete error:', err);
+            alert('❌ Failed to delete item. Check console for details.');
+        }
     };
 
     const handleSaveLocation = async (e: React.FormEvent) => {
