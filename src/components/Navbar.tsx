@@ -44,10 +44,10 @@ export default function Navbar() {
                             display: 'flex',
                             alignItems: 'center',
                             gap: '0.5rem',
-                            color: '#4CAF50',
+                            color: '#FFC107',
                             fontWeight: 'bold',
                             fontSize: '0.9rem',
-                            border: '1px solid #4CAF50',
+                            border: '1px solid #FFC107',
                             padding: '0.2rem 0.6rem',
                             borderRadius: '20px',
                             marginLeft: '1rem'
@@ -55,10 +55,10 @@ export default function Navbar() {
                             <span style={{
                                 width: '8px',
                                 height: '8px',
-                                backgroundColor: '#4CAF50',
+                                backgroundColor: '#FFC107',
                                 borderRadius: '50%',
                                 display: 'inline-block',
-                                boxShadow: '0 0 5px #4CAF50'
+                                boxShadow: '0 0 5px #FFC107'
                             }}></span>
                             OPEN NOW
                         </span>
