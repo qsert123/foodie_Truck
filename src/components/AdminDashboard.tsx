@@ -97,7 +97,10 @@ export default function AdminDashboard() {
             ...editingOffer,
             id: editingOffer.id || Date.now().toString(),
             active: editingOffer.active ?? true,
-            itemIds: editingOffer.itemIds || []
+            itemIds: editingOffer.itemIds || [],
+            price: editingOffer.price ? Number(editingOffer.price) : undefined,
+            discountPercentage: editingOffer.discountPercentage ? Number(editingOffer.discountPercentage) : undefined,
+            image: editingOffer.image || undefined
         };
 
         await fetch('/api/admin/offer', {
@@ -142,6 +145,12 @@ export default function AdminDashboard() {
                     onClick={() => setActiveTab('location')}
                 >
                     Update Location
+                </button>
+                <button
+                    className={`btn ${activeTab === 'offer' ? 'btn-primary' : 'btn-secondary'}`}
+                    onClick={() => setActiveTab('offer')}
+                >
+                    Special Offers
                 </button>
 
                 <a
@@ -492,7 +501,76 @@ export default function AdminDashboard() {
                 </form>
             )}
 
+            {activeTab === 'offer' && (
+                <div>
+                    <button
+                        className="btn btn-primary"
+                        style={{ marginBottom: '1rem' }}
+                        onClick={() => { setIsEditingOffer(true); setEditingOffer({}); }}
+                    >
+                        Add New Offer
+                    </button>
 
+                    {isEditingOffer && (
+                        <form onSubmit={handleSaveOffer} className="card" style={{ marginBottom: '2rem' }}>
+                            <h3>{editingOffer.id ? 'Edit Offer' : 'New Offer'}</h3>
+                            <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Heading</label>
+                                    <input
+                                        placeholder="e.g. Today's Special"
+                                        value={editingOffer.title || ''}
+                                        onChange={e => setEditingOffer({ ...editingOffer, title: e.target.value })}
+                                        required
+                                        style={{ padding: '0.5rem', width: '100%' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Content</label>
+                                    <textarea
+                                        placeholder="Type the details here..."
+                                        value={editingOffer.description || ''}
+                                        onChange={e => setEditingOffer({ ...editingOffer, description: e.target.value })}
+                                        required
+                                        rows={4}
+                                        style={{ padding: '0.5rem', width: '100%' }}
+                                    />
+                                </div>
+                                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={editingOffer.active ?? true}
+                                        onChange={e => setEditingOffer({ ...editingOffer, active: e.target.checked })}
+                                    />
+                                    Active / Visible
+                                </label>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <button type="submit" className="btn btn-primary">Save Offer</button>
+                                    <button type="button" className="btn btn-secondary" onClick={() => setIsEditingOffer(false)}>Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    )}
+
+                    <div style={{ display: 'grid', gap: '1rem' }}>
+                        {offers.map(offer => (
+                            <div key={offer.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <h4 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        {offer.title}
+                                        {!offer.active && <span style={{ fontSize: '0.7rem', background: '#333', padding: '2px 6px', borderRadius: '4px' }}>INACTIVE</span>}
+                                    </h4>
+                                    <p style={{ fontSize: '0.9rem', color: '#888', whiteSpace: 'pre-wrap' }}>{offer.description}</p>
+                                </div>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <button className="btn btn-secondary" onClick={() => { setEditingOffer(offer); setIsEditingOffer(true); }}>Edit</button>
+                                    <button className="btn btn-secondary" style={{ borderColor: 'red', color: 'red' }} onClick={() => handleDeleteOffer(offer.id)}>Delete</button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

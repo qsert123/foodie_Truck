@@ -15,21 +15,23 @@ export default function HomeClient({ initialMenu }: HomeClientProps) {
     const menu = useMenuData(initialMenu);
     const [activeCategory, setActiveCategory] = useState('burger');
 
-    const filteredItems = menu.filter(item => {
-        const cat = item.category.toLowerCase();
-        if (activeCategory === 'burger') return cat.includes('burger');
-        if (activeCategory === 'chicken') return cat.includes('chicken');
-        if (activeCategory === 'fries') return cat.includes('fries');
-        if (activeCategory === 'drink') return cat.includes('drink') || cat.includes('beverage');
-        if (activeCategory === 'other') {
-            return !cat.includes('burger') &&
-                !cat.includes('chicken') &&
-                !cat.includes('fries') &&
-                !cat.includes('drink') &&
-                !cat.includes('beverage');
-        }
-        return true;
-    });
+    const filteredItems = menu
+        .filter(item => item.available) // Hides unavailable items
+        .filter(item => {
+            const cat = item.category.toLowerCase();
+            if (activeCategory === 'burger') return cat.includes('burger');
+            if (activeCategory === 'chicken') return cat.includes('chicken');
+            if (activeCategory === 'fries') return cat.includes('fries');
+            if (activeCategory === 'drink') return cat.includes('drink') || cat.includes('beverage');
+            if (activeCategory === 'other') {
+                return !cat.includes('burger') &&
+                    !cat.includes('chicken') &&
+                    !cat.includes('fries') &&
+                    !cat.includes('drink') &&
+                    !cat.includes('beverage');
+            }
+            return true;
+        });
 
     return (
         <>

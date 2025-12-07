@@ -29,7 +29,9 @@ export interface SpecialOffer {
     title: string;
     description: string;
     itemIds: string[];
-    discountPercentage: number;
+    discountPercentage?: number;
+    price?: number;
+    image?: string;
 }
 
 export interface OrderItem {
