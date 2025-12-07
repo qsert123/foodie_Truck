@@ -5,15 +5,17 @@ import Categories from '@/components/Categories';
 import MenuGrid from '@/components/MenuGrid';
 import { MenuItem } from '@/lib/types';
 import Link from 'next/link';
+import { useMenuData } from '@/hooks/useMenuData';
 
 interface HomeClientProps {
     initialMenu: MenuItem[];
 }
 
 export default function HomeClient({ initialMenu }: HomeClientProps) {
+    const menu = useMenuData(initialMenu);
     const [activeCategory, setActiveCategory] = useState('burger');
 
-    const filteredItems = initialMenu.filter(item => {
+    const filteredItems = menu.filter(item => {
         const cat = item.category.toLowerCase();
         if (activeCategory === 'burger') return cat.includes('burger');
         if (activeCategory === 'chicken') return cat.includes('chicken');

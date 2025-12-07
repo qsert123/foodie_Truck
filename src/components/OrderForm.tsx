@@ -19,6 +19,13 @@ export default function OrderForm({ menu }: OrderFormProps) {
     useEffect(() => {
         const savedName = localStorage.getItem('street_bites_user_name');
         if (savedName) setName(savedName);
+
+        // Ensure user has a device ID
+        let deviceId = localStorage.getItem('street_bites_device_id');
+        if (!deviceId) {
+            deviceId = crypto.randomUUID();
+            localStorage.setItem('street_bites_device_id', deviceId);
+        }
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -26,6 +33,7 @@ export default function OrderForm({ menu }: OrderFormProps) {
         if (cart.length === 0) return;
 
         localStorage.setItem('street_bites_user_name', name);
+        const deviceId = localStorage.getItem('street_bites_device_id');
 
         const orderItems = cart.map(i => ({
             id: i.item.id,
@@ -43,7 +51,8 @@ export default function OrderForm({ menu }: OrderFormProps) {
                 customerName: name,
                 items: orderItems,
                 total: currentTotal,
-                notes
+                notes,
+                deviceId
             })
         });
 

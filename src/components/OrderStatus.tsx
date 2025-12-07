@@ -21,10 +21,21 @@ export default function OrderStatus() {
             if (res.ok) {
                 const data: Order[] = await res.json();
                 const activeNotifications = data.filter(o => o.status === 'ready' || o.status === 'cancelled');
-                setNotifications(activeNotifications);
+
+                // Get current device ID
+                const currentDeviceId = localStorage.getItem('street_bites_device_id');
+
+                // Filter notifications for this device
+                const myNotifications = activeNotifications.filter(o => {
+                    // If order has no device ID (legacy), maybe show it? Or better safe than sorry: only show matches.
+                    // For now, let's only show explicit matches to avoid spamming everyone.
+                    return o.deviceId && o.deviceId === currentDeviceId;
+                });
+
+                setNotifications(myNotifications);
 
                 // Check for new ready orders to notify
-                activeNotifications.forEach(order => {
+                myNotifications.forEach(order => {
                     if (order.status === 'ready' && !notifiedOrdersRef.current.has(order.id)) {
                         // Mark as notified
                         notifiedOrdersRef.current.add(order.id);

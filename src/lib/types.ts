@@ -47,6 +47,7 @@ export interface Order {
     status: 'pending' | 'ready' | 'completed' | 'cancelled';
     createdAt: string;
     notes?: string;
+    deviceId?: string;
 }
 
 export interface DBData {

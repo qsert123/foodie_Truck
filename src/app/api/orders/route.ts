@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: validation.error }, { status: 400 });
         }
 
-        const { customerName, items, total, notes } = body;
+        const { customerName, items, total, notes, deviceId } = body;
 
         // Sanitize inputs
         const sanitizedCustomerName = sanitizeInput(customerName);
@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
             status: 'pending',
             createdAt: new Date().toISOString(),
             notes: sanitizedNotes,
+            deviceId,
         };
 
         await addOrder(newOrder);
