@@ -526,6 +526,16 @@ export default function AdminDashboard() {
                                     />
                                 </div>
                                 <div>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Discount Percentage</label>
+                                    <input
+                                        type="number"
+                                        placeholder="e.g. 20"
+                                        value={editingOffer.discountPercentage || ''}
+                                        onChange={e => setEditingOffer({ ...editingOffer, discountPercentage: e.target.value })}
+                                        style={{ padding: '0.5rem', width: '100%' }}
+                                    />
+                                </div>
+                                <div>
                                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Content</label>
                                     <textarea
                                         placeholder="Type the details here..."
