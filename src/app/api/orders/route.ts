@@ -71,6 +71,7 @@ export async function POST(request: NextRequest) {
             total,
             status: 'pending',
             createdAt: new Date().toISOString(),
+            time: new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }),
             notes: sanitizedNotes,
             deviceId,
             orderNumber,

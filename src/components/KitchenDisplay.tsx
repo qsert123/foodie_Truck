@@ -80,8 +80,8 @@ export default function KitchenDisplay() {
                     </div>
 
                     <p style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>{order.customerName}</p>
-                    <p style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--primary)', marginBottom: '0.5rem' }}>
-                        Total: ₹{order.total}
+                    <p style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#000', marginBottom: '0.5rem', background: '#e0e0e0', display: 'inline-block', padding: '0.25rem 0.5rem', borderRadius: '4px' }}>
+                        Total: ₹{order.total || 0}
                     </p>
 
 

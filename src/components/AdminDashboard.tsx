@@ -68,7 +68,7 @@ export default function AdminDashboard() {
             const rows = orders.map((o: any) => {
                 const dateObj = new Date(o.createdAt);
                 const dateStr = dateObj.toLocaleDateString();
-                const timeStr = dateObj.toLocaleTimeString();
+                const timeStr = o.time || dateObj.toLocaleTimeString(); // Use stored time or fallback to derived time
 
                 // Create a map for this order's items for quick lookup
                 const itemMap = new Map();

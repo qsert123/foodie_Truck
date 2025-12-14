@@ -52,6 +52,7 @@ export interface Order {
     deviceId?: string;
     formattedOrderId?: string;
     orderNumber?: number;
+    time?: string;
 }
 
 export interface DBData {
