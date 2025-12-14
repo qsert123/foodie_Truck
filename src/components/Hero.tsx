@@ -8,8 +8,8 @@ export default function Hero() {
                 <h1 className={`${styles.title} animate-slide-up`}>Gourmet Street Food</h1>
                 <p className={`${styles.subtitle} animate-slide-up delay-200`}>Fresh ingredients, bold flavors, served daily.</p>
                 <div className={`${styles.actions} animate-slide-up delay-400`}>
-                    <Link href="/menu" className="btn btn-primary">View Menu</Link>
-                    <Link href="/location" className="btn btn-secondary">Find Truck</Link>
+                    <Link href="/" className="btn btn-primary">View Menu</Link>
+
                 </div>
             </div>
         </section>

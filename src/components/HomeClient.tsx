@@ -52,7 +52,7 @@ export default function HomeClient({ initialMenu }: HomeClientProps) {
                 <h3 style={{ fontSize: '1.2rem', margin: 0 }}>
                     {activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}s
                 </h3>
-                <Link href="/menu" style={{ color: '#888', fontSize: '0.9rem' }}>See More</Link>
+                <Link href="/" style={{ color: '#888', fontSize: '0.9rem' }}>See More</Link>
             </div>
 
             <MenuGrid items={filteredItems} />
