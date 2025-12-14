@@ -65,10 +65,11 @@ export interface DBData {
 
 export interface LoginRequest {
     id: string;
-    email: string; // The email waiting for approval
-    token: string; // Secret token for the link
-    status: 'pending' | 'approved' | 'rejected' | 'used';
+    email: string;
+    code: string; // 6-digit OTP
+    status: 'pending' | 'verified' | 'failed';
     createdAt: string;
     expiresAt: number;
     ip?: string;
+    attempts: number;
 }

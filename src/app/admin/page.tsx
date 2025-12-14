@@ -11,6 +11,7 @@ export default function AdminLogin() {
     const router = useRouter();
 
     const [requestId, setRequestId] = useState<string | null>(null);
+    const [verificationCode, setVerificationCode] = useState('');
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -33,9 +34,10 @@ export default function AdminLogin() {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                if (data.requireApproval) {
+                if (data.requireVerification) {
                     setRequestId(data.requestId);
-                    pollStatus(data.requestId);
+                    setLoading(false);
+                    setError('');
                 } else {
                     router.push('/admin/dashboard');
                 }
@@ -51,42 +53,40 @@ export default function AdminLogin() {
         }
     };
 
-    const pollStatus = async (id: string) => {
-        const interval = setInterval(async () => {
-            try {
-                const res = await fetch(`/api/admin/status?id=${id}`);
-                const data = await res.json();
+    const handleVerify = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
 
-                if (data.status === 'approved') {
-                    clearInterval(interval);
-                    router.push('/admin/dashboard');
-                } else if (data.status === 'rejected') {
-                    clearInterval(interval);
-                    setLoading(false);
-                    setRequestId(null);
-                    setError('Login request rejected.');
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }, 2000); // Check every 2 seconds
+        try {
+            const response = await fetch('/api/admin/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ requestId, code: verificationCode }),
+            });
 
-        // Stop polling after 5 minutes
-        setTimeout(() => {
-            clearInterval(interval);
-            if (loading) {
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                router.push('/admin/dashboard');
+            } else {
                 setLoading(false);
-                setRequestId(null);
-                setError('Login request timed out.');
+                setError(data.error || 'Invalid code');
             }
-        }, 5 * 60 * 1000);
+        } catch (err) {
+            setLoading(false);
+            setError('Verification failed.');
+        }
     };
 
     return (
         <main style={{ backgroundColor: '#FFFFFF', minHeight: '100vh' }}>
             <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <form onSubmit={handleLogin} className="card" style={{ width: '100%', maxWidth: '400px' }}>
-                    <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>Admin Login</h1>
+                <form onSubmit={requestId ? handleVerify : handleLogin} className="card" style={{ width: '100%', maxWidth: '400px' }}>
+                    <h1 style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                        {requestId ? 'Verify Identity' : 'Admin Login'}
+                    </h1>
+
                     {error && (
                         <div style={{
                             background: '#F44336',
@@ -99,28 +99,58 @@ export default function AdminLogin() {
                             {error}
                         </div>
                     )}
+
                     {requestId ? (
-                        <div style={{ textAlign: 'center' }}>
-                            <div className="animate-pulse" style={{ fontSize: '3rem', marginBottom: '1rem' }}>🛡️</div>
-                            <h3>Waiting for Approval</h3>
-                            <p style={{ color: '#666', marginTop: '1rem' }}>
-                                We've sent an approval request to the admin emails.<br />
-                                <strong>arshekhjohn7@gmail.com</strong><br />
-                                <strong>cyberthoughts421@gmail.com</strong>
-                            </p>
-                            <div style={{ marginTop: '2rem' }}>
-                                <div className="spinner" style={{
-                                    border: '4px solid #f3f3f3',
-                                    borderTop: '4px solid var(--primary)',
-                                    borderRadius: '50%',
-                                    width: '30px',
-                                    height: '30px',
-                                    animation: 'spin 1s linear infinite',
-                                    margin: '0 auto'
-                                }}></div>
-                                <p style={{ fontSize: '0.8rem', color: '#999', marginTop: '1rem' }}>Checking status...</p>
+                        <>
+                            <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
+                                <p style={{ marginBottom: '1rem', color: '#666' }}>
+                                    We sent a 6-digit code to your email.<br />
+                                    <small>(Check spam if not found)</small>
+                                </p>
+                                <input
+                                    type="text"
+                                    value={verificationCode}
+                                    onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                    placeholder="Enter 6-digit code"
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '4px',
+                                        border: '1px solid #333',
+                                        background: '#fff',
+                                        color: '#000',
+                                        fontSize: '1.5rem',
+                                        textAlign: 'center',
+                                        letterSpacing: '0.5rem'
+                                    }}
+                                    maxLength={6}
+                                    required
+                                />
                             </div>
-                        </div>
+                            <button
+                                type="submit"
+                                className="btn btn-primary"
+                                style={{ width: '100%' }}
+                                disabled={loading || verificationCode.length !== 6}
+                            >
+                                {loading ? 'Verifying...' : 'Verify Code'}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => { setRequestId(null); setPassword(''); setError(''); }}
+                                style={{
+                                    width: '100%',
+                                    marginTop: '1rem',
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#666',
+                                    cursor: 'pointer',
+                                    textDecoration: 'underline'
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        </>
                     ) : (
                         <>
                             <div style={{ marginBottom: '1.5rem' }}>
@@ -153,12 +183,6 @@ export default function AdminLogin() {
                         </>
                     )}
                 </form>
-                <style jsx>{`
-                    @keyframes spin {
-                        0% { transform: rotate(0deg); }
-                        100% { transform: rotate(360deg); }
-                    }
-                `}</style>
             </div>
         </main>
     );
