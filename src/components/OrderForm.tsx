@@ -16,6 +16,8 @@ export default function OrderForm({ menu }: OrderFormProps) {
 
     const [lastOrderTotal, setLastOrderTotal] = useState(0);
 
+    const [showConfirmation, setShowConfirmation] = useState(false);
+
     useEffect(() => {
         const savedName = localStorage.getItem('street_bites_user_name');
         if (savedName) setName(savedName);
@@ -28,10 +30,13 @@ export default function OrderForm({ menu }: OrderFormProps) {
         }
     }, []);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (cart.length === 0) return;
+        setShowConfirmation(true);
+    };
 
+    const confirmOrder = async () => {
         localStorage.setItem('street_bites_user_name', name);
         const deviceId = localStorage.getItem('street_bites_device_id');
 
@@ -62,6 +67,7 @@ export default function OrderForm({ menu }: OrderFormProps) {
             clearCart();
             setName('');
             setNotes('');
+            setShowConfirmation(false);
         }
     };
 
@@ -193,6 +199,41 @@ export default function OrderForm({ menu }: OrderFormProps) {
                     </div>
                 )}
             </div>
+
+            {showConfirmation && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    background: 'rgba(0,0,0,0.8)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <div className="card animate-scale-in" style={{ maxWidth: '400px', width: '90%', padding: '2rem', textAlign: 'center', border: '2px solid var(--primary)' }}>
+                        <h3 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Confirm Order?</h3>
+                        <p style={{ marginBottom: '2rem', fontSize: '1.1rem' }}>Total Amount: <strong style={{ color: 'var(--primary)' }}>₹{cartTotal}</strong></p>
+                        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                            <button
+                                onClick={() => setShowConfirmation(false)}
+                                className="btn"
+                                style={{ background: '#333', color: '#fff' }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmOrder}
+                                className="btn btn-primary"
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

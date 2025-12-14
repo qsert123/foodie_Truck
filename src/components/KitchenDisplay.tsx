@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Order } from '@/lib/types';
 
 export default function KitchenDisplay() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [prevOrderCount, setPrevOrderCount] = useState(0);
+
+    const isFirstLoad = useRef(true);
 
     useEffect(() => {
         fetchOrders();
@@ -20,10 +22,15 @@ export default function KitchenDisplay() {
                 const data = await res.json();
                 console.log('Fetched orders:', data);
 
-                // Play sound if new orders arrived
-                if (data.length > prevOrderCount) {
-                    const audio = new Audio('https://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3');
-                    audio.play().catch(e => console.error("Audio play failed", e));
+                if (isFirstLoad.current) {
+                    isFirstLoad.current = false;
+                    setPrevOrderCount(data.length);
+                } else {
+                    // Play sound if new orders arrived
+                    if (data.length > prevOrderCount) {
+                        const audio = new Audio('https://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3');
+                        audio.play().catch(e => console.error("Audio play failed", e));
+                    }
                 }
 
                 setOrders(data);
