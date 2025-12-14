@@ -20,7 +20,9 @@ export default function MenuGrid({ items }: MenuGridProps) {
     return (
         <div className={styles.grid}>
             {items.map((item, index) => {
+                const isAvailable = item.available !== false; // Default to true if undefined
                 const quantity = getItemQuantity(item.id);
+
                 return (
                     <div
                         key={item.id}
@@ -33,9 +35,32 @@ export default function MenuGrid({ items }: MenuGridProps) {
                             boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
                             border: 'none',
                             display: 'flex',
-                            flexDirection: 'column'
+                            flexDirection: 'column',
+                            filter: isAvailable ? 'none' : 'grayscale(100%)',
+                            opacity: isAvailable ? 1 : 0.7,
+                            position: 'relative',
+                            pointerEvents: isAvailable ? 'auto' : 'none'
                         }}
                     >
+                        {!isAvailable && (
+                            <div style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
+                                background: 'rgba(0,0,0,0.8)',
+                                color: '#fff',
+                                padding: '0.5rem 1rem',
+                                borderRadius: '8px',
+                                fontWeight: 'bold',
+                                zIndex: 10,
+                                whiteSpace: 'nowrap',
+                                border: '1px solid #fff'
+                            }}>
+                                OUT OF STOCK
+                            </div>
+                        )}
+
                         <div className={styles.imageWrapper} style={{
                             position: 'relative',
                             width: '100%',
@@ -99,12 +124,13 @@ export default function MenuGrid({ items }: MenuGridProps) {
 
                             {quantity === 0 ? (
                                 <button
-                                    onClick={() => addToCart(item)}
+                                    onClick={() => isAvailable && addToCart(item)}
+                                    disabled={!isAvailable}
                                     style={{
                                         width: '32px',
                                         height: '32px',
                                         borderRadius: '50%',
-                                        background: 'var(--primary)',
+                                        background: isAvailable ? 'var(--primary)' : '#ccc',
                                         color: '#000',
                                         border: 'none',
                                         display: 'flex',
@@ -112,7 +138,8 @@ export default function MenuGrid({ items }: MenuGridProps) {
                                         justifyContent: 'center',
                                         fontSize: '1.2rem',
                                         fontWeight: 'bold',
-                                        boxShadow: '0 2px 8px rgba(198, 233, 0, 0.4)'
+                                        boxShadow: isAvailable ? '0 2px 8px rgba(198, 233, 0, 0.4)' : 'none',
+                                        cursor: isAvailable ? 'pointer' : 'not-allowed'
                                     }}
                                 >
                                     +
