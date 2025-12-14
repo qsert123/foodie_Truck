@@ -1,7 +1,7 @@
 import { db, isFirebaseInitialized } from './firebase';
-import { collection, getDocs, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch } from 'firebase/firestore';
-import { Order, MenuItem, LocationData, SpecialOffer, DBData } from './types';
-export type { Order, MenuItem, LocationData, SpecialOffer, DBData };
+import { collection, getDocs, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc, query, where, writeBatch, runTransaction } from 'firebase/firestore';
+import { Order, MenuItem, LocationData, SpecialOffer, DBData, LoginRequest } from './types';
+export type { Order, MenuItem, LocationData, SpecialOffer, DBData, LoginRequest };
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -226,9 +226,39 @@ export async function getDB(): Promise<DBData> {
         getOrders(),
         getOffers()
     ]);
-    return { menu, location, orders, offers };
+    return { menu, location, orders, offers, loginRequests: [] };
 }
 
 export async function saveDB(data: DBData): Promise<void> {
     console.warn("saveDB is deprecated. Use specific save functions.");
+}
+
+// --- Login Request Helpers ---
+
+export async function createLoginRequest(req: LoginRequest): Promise<void> {
+    if (isFirebaseInitialized) {
+        await setDoc(doc(db, 'login_requests', req.id), req);
+    } else {
+        // Fallback or no-op for local
+        console.log('Mock DB: Created Login Request', req);
+    }
+}
+
+export async function getLoginRequest(id: string): Promise<LoginRequest | null> {
+    if (isFirebaseInitialized) {
+        const docRef = doc(db, 'login_requests', id);
+        const snapshot = await getDoc(docRef);
+        if (snapshot.exists()) {
+            return snapshot.data() as LoginRequest;
+        }
+        return null;
+    }
+    return null;
+}
+
+export async function updateLoginRequestStatus(id: string, status: LoginRequest['status']): Promise<void> {
+    if (isFirebaseInitialized) {
+        const docRef = doc(db, 'login_requests', id);
+        await updateDoc(docRef, { status });
+    }
 }

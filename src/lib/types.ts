@@ -60,4 +60,15 @@ export interface DBData {
     location: LocationData;
     orders: Order[];
     offers: SpecialOffer[];
+    loginRequests: LoginRequest[];
+}
+
+export interface LoginRequest {
+    id: string;
+    email: string; // The email waiting for approval
+    token: string; // Secret token for the link
+    status: 'pending' | 'approved' | 'rejected' | 'used';
+    createdAt: string;
+    expiresAt: number;
+    ip?: string;
 }
