@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { MenuItem, LocationData } from '@/lib/types';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState<'menu' | 'location' | 'offer'>('menu');
+    const [activeTab, setActiveTab] = useState<'menu' | 'location' | 'offer' | 'stats'>('menu');
     const [menu, setMenu] = useState<MenuItem[]>([]);
     const [location, setLocation] = useState<LocationData | null>(null);
     const [offers, setOffers] = useState<any[]>([]);
@@ -20,6 +20,8 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         fetchData();
+        // Trigger auto-cleanup of old orders
+        fetch('/api/admin/cleanup', { method: 'POST' }).catch(console.error);
     }, []);
 
     const fetchData = async () => {
@@ -36,6 +38,67 @@ export default function AdminDashboard() {
         setLocation(locData);
         setOffers(offersData);
         setLoading(false);
+    };
+
+    const handleDownloadReport = async () => {
+        try {
+            const res = await fetch('/api/admin/reports');
+            if (!res.ok) throw new Error('Failed to fetch report');
+
+            const data = await res.json();
+            const orders = data.orders || [];
+
+            if (orders.length === 0) {
+                alert('No orders found for this week.');
+                return;
+            }
+
+            // Convert to CSV
+            const headers = ['Order ID', 'Date', 'Customer Name', 'Items', 'Total'];
+            const rows = orders.map((o: any) => [
+                o.formattedOrderId || o.id,
+                new Date(o.createdAt).toLocaleString(),
+                `"${o.customerName.replace(/"/g, '""')}"`, // Escape quotes
+                `"${o.items.map((i: any) => `${i.quantity}x ${i.name}`).join(', ').replace(/"/g, '""')}"`,
+                o.total
+            ]);
+
+            const csvContent = [
+                headers.join(','),
+                ...rows.map((row: any[]) => row.join(','))
+            ].join('\n');
+
+            // Download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `weekly_report_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error(error);
+            alert('Failed to download report');
+        }
+    };
+
+    const handleDeleteCategory = async (category: string) => {
+        if (!confirm(`Warning: This will delete ALL items in the category "${category}".\nThis action cannot be undone.\n\nAre you sure?`)) return;
+
+        try {
+            const res = await fetch(`/api/admin/categories?category=${encodeURIComponent(category)}`, { method: 'DELETE' });
+            if (res.ok) {
+                alert(`Category "${category}" deleted.`);
+                fetchData();
+            } else {
+                alert('Failed to delete category.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Error deleting category.');
+        }
     };
 
     const handleSaveItem = async (e: React.FormEvent) => {
@@ -145,6 +208,12 @@ export default function AdminDashboard() {
                     onClick={() => setActiveTab('offer')}
                 >
                     Special Offers
+                </button>
+                <button
+                    className={`btn ${activeTab === 'stats' ? 'btn-primary' : 'btn-secondary'}`}
+                    onClick={() => setActiveTab('stats')}
+                >
+                    Stats & Reports
                 </button>
 
                 <a
@@ -430,6 +499,7 @@ export default function AdminDashboard() {
 
             {activeTab === 'offer' && (
                 <div>
+                    {/* ... (existing offer content) ... */}
                     <button
                         className="btn btn-primary"
                         style={{ marginBottom: '1rem' }}
@@ -440,6 +510,7 @@ export default function AdminDashboard() {
 
                     {isEditingOffer && (
                         <form onSubmit={handleSaveOffer} className="card" style={{ marginBottom: '2rem' }}>
+                            {/* ... form content ... */}
                             <h3>{editingOffer.id ? 'Edit Offer' : 'New Offer'}</h3>
                             <div style={{ display: 'grid', gap: '1rem', marginTop: '1rem' }}>
                                 <div>
@@ -505,6 +576,40 @@ export default function AdminDashboard() {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+            )}
+
+            {activeTab === 'stats' && (
+                <div className="card">
+                    <h2 style={{ marginBottom: '1.5rem', color: 'var(--primary)' }}>Weekly Reports & Stats</h2>
+
+                    <div style={{ marginBottom: '2rem' }}>
+                        <h3 style={{ marginBottom: '1rem' }}>Weekly Orders</h3>
+                        <p style={{ color: '#888', marginBottom: '1rem' }}>Download a CSV report of all orders from the last 7 days. Orders older than 7 days are automatically deleted.</p>
+                        <button className="btn btn-primary" onClick={handleDownloadReport}>
+                            📥 Download Weekly CSV Report
+                        </button>
+                    </div>
+
+                    <div style={{ borderTop: '1px solid #333', paddingTop: '2rem' }}>
+                        <h3 style={{ marginBottom: '1rem', color: '#F44336' }}>Danger Zone: Delete Category</h3>
+                        <p style={{ color: '#888', marginBottom: '1rem' }}>Deleting a category will <strong>permanently delete all menu items</strong> within it.</p>
+
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                            {Array.from(new Set(menu.map(item => item.category))).map(cat => (
+                                <div key={cat} style={{ background: '#222', padding: '1rem', borderRadius: '8px', border: '1px solid #444', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                    <span style={{ fontWeight: 'bold' }}>{cat}</span>
+                                    <button
+                                        className="btn btn-secondary"
+                                        style={{ borderColor: 'red', color: 'red', padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}
+                                        onClick={() => handleDeleteCategory(cat)}
+                                    >
+                                        Delete Category
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}

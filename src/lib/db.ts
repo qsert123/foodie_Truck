@@ -102,6 +102,40 @@ export async function deleteMenuItem(id: string): Promise<void> {
     await deleteDoc(doc(db, COL_MENU, id));
 }
 
+export async function deleteCategory(categoryName: string): Promise<void> {
+    if (!isFirebaseInitialized) throw new Error("Firebase not configured");
+
+    const batch = writeBatch(db);
+    const q = query(collection(db, COL_MENU), where("category", "==", categoryName));
+    const snapshot = await getDocs(q);
+
+    snapshot.docs.forEach((doc) => {
+        batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+}
+
+export async function cleanOldOrders(days: number = 7): Promise<number> {
+    if (!isFirebaseInitialized) return 0;
+
+    // Calculate cutoff date
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+    const cutoffISO = cutoffDate.toISOString();
+
+    const q = query(collection(db, COL_ORDERS), where("createdAt", "<", cutoffISO));
+    const snapshot = await getDocs(q);
+
+    const batch = writeBatch(db);
+    snapshot.docs.forEach((doc) => {
+        batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+    return snapshot.size;
+}
+
 // --- Order Functions ---
 export async function getOrders(): Promise<Order[]> {
     if (!isFirebaseInitialized) {
