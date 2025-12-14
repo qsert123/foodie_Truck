@@ -53,27 +53,54 @@ export default function AdminDashboard() {
                 return;
             }
 
-            // Convert to CSV
-            const headers = ['Order ID', 'Date', 'Customer Name', 'Items', 'Total'];
-            const rows = orders.map((o: any) => [
-                o.formattedOrderId || o.id,
-                new Date(o.createdAt).toLocaleString(),
-                `"${o.customerName.replace(/"/g, '""')}"`, // Escape quotes
-                `"${o.items.map((i: any) => `${i.quantity}x ${i.name}`).join(', ').replace(/"/g, '""')}"`,
-                o.total
-            ]);
+            // 1. Identify all unique item names across all orders to build dynamic columns
+            const allItemNames = new Set<string>();
+            orders.forEach((o: any) => {
+                o.items.forEach((i: any) => allItemNames.add(i.name));
+            });
+            // Sort item columns alphabetically for consistency
+            const itemColumns = Array.from(allItemNames).sort();
 
+            // 2. Create Headers
+            const headers = ['Order ID', 'Date', 'Time', 'Customer Name', ...itemColumns, 'Total Amount'];
+
+            // 3. Map orders to rows
+            const rows = orders.map((o: any) => {
+                const dateObj = new Date(o.createdAt);
+                const dateStr = dateObj.toLocaleDateString();
+                const timeStr = dateObj.toLocaleTimeString();
+
+                // Create a map for this order's items for quick lookup
+                const itemMap = new Map();
+                o.items.forEach((i: any) => {
+                    itemMap.set(i.name, i.quantity);
+                });
+
+                // Build the row
+                const rowData = [
+                    o.formattedOrderId || o.id,
+                    dateStr,
+                    timeStr,
+                    `"${o.customerName.replace(/"/g, '""')}"`, // Escape quotes
+                    ...itemColumns.map(itemName => itemMap.get(itemName) || ''), // Quantity or empty
+                    o.total
+                ];
+
+                return rowData.join(',');
+            });
+
+            // 4. Combine headers and rows
             const csvContent = [
                 headers.join(','),
-                ...rows.map((row: any[]) => row.join(','))
+                ...rows
             ].join('\n');
 
-            // Download
+            // 5. Download
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', `weekly_report_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute('download', `weekly_sales_report_${new Date().toISOString().split('T')[0]}.csv`);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
