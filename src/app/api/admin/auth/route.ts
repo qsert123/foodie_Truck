@@ -79,54 +79,15 @@ export async function POST(request: NextRequest) {
         // Send Email (Mock/Real)
         console.log('\n\n==================================================');
         console.log('🔐 ADMIN LOGIN OTP 🔐');
-        console.log(`Verification Code: ${code}`);
-        console.log('Emails sent to: arshekhjohn7@gmail.com, cyberthoughts421@gmail.com');
-        console.log('==================================================\n\n');
+    });
 
-        // Try to send real email if credentials exist
-        try {
-            if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-                const transporter = nodemailer.createTransport({
-                    service: 'gmail',
-                    auth: {
-                        user: process.env.EMAIL_USER,
-                        pass: process.env.EMAIL_PASS
-                    }
-                });
-
-                await transporter.sendMail({
-                    from: process.env.EMAIL_USER,
-                    to: 'arshekhjohn7@gmail.com, cyberthoughts421@gmail.com',
-                    subject: '🔐 Admin Verification Code - Broast N Bakes',
-                    html: `
-                        <div style="font-family: sans-serif; padding: 20px;">
-                            <h2>Admin Login Verification</h2>
-                            <p>Use the following code to complete your login:</p>
-                            <h1 style="background: #f4f4f4; padding: 10px 20px; display: inline-block; letter-spacing: 5px; border-radius: 8px;">${code}</h1>
-                            <p><strong>IP:</strong> ${clientId}</p>
-                            <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
-                            <p style="color: #666; font-size: 0.9em;">This code expires in 10 minutes.</p>
-                        </div>
-                    `
-                });
-            }
-        } catch (e) {
-            console.error('Failed to send email:', e);
-        }
-
-        return NextResponse.json({
-            success: true,
-            requireVerification: true,
-            requestId: requestId
-        });
-
-    } catch (error) {
-        console.error('Auth error:', error);
-        return NextResponse.json(
-            { error: 'Authentication failed' },
-            { status: 500 }
-        );
-    }
+} catch (error) {
+    console.error('Auth error:', error);
+    return NextResponse.json(
+        { error: 'Authentication failed' },
+        { status: 500 }
+    );
+}
 }
 
 // Logout endpoint
