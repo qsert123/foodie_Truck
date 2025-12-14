@@ -141,12 +141,6 @@ export default function AdminDashboard() {
                     Manage Menu
                 </button>
                 <button
-                    className={`btn ${activeTab === 'location' ? 'btn-primary' : 'btn-secondary'}`}
-                    onClick={() => setActiveTab('location')}
-                >
-                    Update Location
-                </button>
-                <button
                     className={`btn ${activeTab === 'offer' ? 'btn-primary' : 'btn-secondary'}`}
                     onClick={() => setActiveTab('offer')}
                 >
@@ -154,7 +148,7 @@ export default function AdminDashboard() {
                 </button>
 
                 <a
-                    href="/menu"
+                    href="/"
                     target="_blank"
                     className="btn btn-secondary"
                     style={{ marginLeft: 'auto' }}
@@ -164,17 +158,10 @@ export default function AdminDashboard() {
             </div>
 
             <div className="card" style={{ marginBottom: '2rem' }}>
-                <h2 style={{ marginBottom: '1rem', color: 'var(--primary)' }}>Current Location & Status</h2>
+                <h2 style={{ marginBottom: '1rem', color: 'var(--primary)' }}>Store Status</h2>
                 {location ? (
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <p style={{ fontSize: '1.2rem' }}>
-                                <strong>{location.name}</strong><br />
-                                {location.address}<br />
-                                <span style={{ fontSize: '0.9rem', color: '#888' }}>
-                                    {location.openTime} - {location.closeTime}
-                                </span>
-                            </p>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                 <span style={{
                                     color: location.isOnline !== false ? '#4CAF50' : '#F44336',
@@ -439,67 +426,7 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {activeTab === 'location' && location && (
-                <form onSubmit={handleSaveLocation} className="card">
-                    <div style={{ display: 'grid', gap: '1rem' }}>
-                        <label>
-                            Name
-                            <input
-                                value={location.name}
-                                onChange={e => setLocation({ ...location, name: e.target.value })}
-                                style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                            />
-                        </label>
-                        <label>
-                            Address
-                            <input
-                                value={location.address}
-                                onChange={e => setLocation({ ...location, address: e.target.value })}
-                                style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                            />
-                        </label>
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <label style={{ flex: 1 }}>
-                                Open Time
-                                <input
-                                    value={location.openTime}
-                                    onChange={e => setLocation({ ...location, openTime: e.target.value })}
-                                    style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                                />
-                            </label>
-                            <label style={{ flex: 1 }}>
-                                Close Time
-                                <input
-                                    value={location.closeTime}
-                                    onChange={e => setLocation({ ...location, closeTime: e.target.value })}
-                                    style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                                />
-                            </label>
-                        </div>
-                        <div style={{ display: 'flex', gap: '1rem' }}>
-                            <label style={{ flex: 1 }}>
-                                Phone Number
-                                <input
-                                    value={location.phone || ''}
-                                    onChange={e => setLocation({ ...location, phone: e.target.value })}
-                                    placeholder="+91 98765 43210"
-                                    style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                                />
-                            </label>
-                            <label style={{ flex: 1 }}>
-                                Instagram Handle
-                                <input
-                                    value={location.instagram || ''}
-                                    onChange={e => setLocation({ ...location, instagram: e.target.value })}
-                                    placeholder="@foodtruck"
-                                    style={{ width: '100%', padding: '0.5rem', marginTop: '0.5rem' }}
-                                />
-                            </label>
-                        </div>
-                        <button type="submit" className="btn btn-primary">Update Location</button>
-                    </div>
-                </form>
-            )}
+
 
             {activeTab === 'offer' && (
                 <div>

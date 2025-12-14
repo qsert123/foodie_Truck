@@ -34,7 +34,6 @@ export default function Navbar() {
                         <span className="desktop-only">Order Now</span>
                         <span className="mobile-only">Order</span>
                     </Link>
-                    <Link href="/location" className={styles.link}>Find Us</Link>
                     {isOnline && (
                         <span style={{
                             display: 'flex',
