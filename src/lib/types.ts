@@ -50,6 +50,8 @@ export interface Order {
     createdAt: string;
     notes?: string;
     deviceId?: string;
+    formattedOrderId?: string;
+    orderNumber?: number;
 }
 
 export interface DBData {

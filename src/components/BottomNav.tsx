@@ -17,9 +17,6 @@ export default function BottomNav() {
             <Link href="/" className={`${styles.navItem} ${pathname === '/' ? styles.active : ''}`}>
                 <span className={styles.icon}>🏠</span>
             </Link>
-            <Link href="/menu" className={`${styles.navItem} ${pathname === '/menu' ? styles.active : ''}`}>
-                <span className={styles.icon}>📋</span>
-            </Link>
 
             <Link href="/order" className={`${styles.navItem} ${pathname === '/order' ? styles.active : ''}`}>
                 <span className={styles.icon}>🛍</span>

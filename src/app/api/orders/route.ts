@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addOrder, getOrders } from '@/lib/db';
+import { db } from '@/lib/firebase';
+import { doc, runTransaction } from 'firebase/firestore';
 import { Order } from '@/lib/types';
 import { validateOrder, sanitizeInput, createSecureResponse, rateLimit, getClientIdentifier } from '@/lib/security';
 
@@ -41,6 +43,27 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        // Generate Daily Order ID
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const counterRef = doc(db, 'counters', 'daily');
+
+        let orderNumber = 1;
+
+        await runTransaction(db, async (transaction) => {
+            const counterDoc = await transaction.get(counterRef);
+
+            if (counterDoc.exists()) {
+                const data = counterDoc.data();
+                if (data.date === today) {
+                    orderNumber = data.count + 1;
+                }
+            }
+
+            transaction.set(counterRef, { date: today, count: orderNumber });
+        });
+
+        const formattedOrderId = orderNumber.toString().padStart(4, '0');
+
         const newOrder: Order = {
             id: Date.now().toString(),
             customerName: sanitizedCustomerName,
@@ -50,6 +73,8 @@ export async function POST(request: NextRequest) {
             createdAt: new Date().toISOString(),
             notes: sanitizedNotes,
             deviceId,
+            orderNumber,
+            formattedOrderId
         };
 
         await addOrder(newOrder);

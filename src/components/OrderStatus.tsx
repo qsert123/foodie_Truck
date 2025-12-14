@@ -27,8 +27,6 @@ export default function OrderStatus() {
 
                 // Filter notifications for this device
                 const myNotifications = activeNotifications.filter(o => {
-                    // If order has no device ID (legacy), maybe show it? Or better safe than sorry: only show matches.
-                    // For now, let's only show explicit matches to avoid spamming everyone.
                     return o.deviceId && o.deviceId === currentDeviceId;
                 });
 
@@ -46,8 +44,8 @@ export default function OrderStatus() {
                         // System Notification
                         if (Notification.permission === 'granted') {
                             new Notification("Order Ready!", {
-                                body: `Your order is ready! Please get it from the truck.`,
-                                icon: '/images/burger.png'
+                                body: `Your order is ready pick it up from van. Total: ₹${order.total}`,
+                                icon: '/logo.png'
                             });
                         }
                     }
@@ -150,10 +148,18 @@ export default function OrderStatus() {
                                 textTransform: 'uppercase',
                                 marginBottom: '0.5rem'
                             }}>
-                                {order.status === 'ready' ? 'Ready! Get it from the truck' : 'Order Cancelled'}
+                                {order.status === 'ready' ? 'Your order is ready pick it up from van' : 'Order Cancelled'}
                             </div>
-                            <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
+                            <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
                                 {order.customerName}
+                            </div>
+                            {order.formattedOrderId && (
+                                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--primary)', marginBottom: '0.5rem' }}>
+                                    Order #{order.formattedOrderId}
+                                </div>
+                            )}
+                            <div style={{ fontSize: '1.2rem', marginBottom: '1rem', color: '#888' }}>
+                                Total: ₹{order.total}
                             </div>
                             <button
                                 onClick={() => handleClose(order.id)}
