@@ -85,7 +85,7 @@ export default function OrderForm({ menu }: OrderFormProps) {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
                     <h2 style={{ margin: 0 }}>Your Order</h2>
                     {cart.length > 0 && (
-                        <a href="/menu" className="btn btn-secondary" style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}>
+                        <a href="/" className="btn btn-secondary" style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}>
                             + Add More Items
                         </a>
                     )}
@@ -94,7 +94,7 @@ export default function OrderForm({ menu }: OrderFormProps) {
                 {cart.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '2rem' }}>
                         <p style={{ color: '#888', marginBottom: '1rem' }}>Your cart is empty</p>
-                        <a href="/menu" className="btn btn-primary">Browse Menu</a>
+                        <a href="/" className="btn btn-primary">Browse Menu</a>
                     </div>
                 ) : (
                     <div style={{ display: 'grid', gap: '1rem' }}>
