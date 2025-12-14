@@ -101,6 +101,28 @@ export default function AdminDashboard() {
         }
     };
 
+    const handleClearAllOrders = async () => {
+        if (!confirm('DANGER: This will delete ALL order history from the database.\nThis action cannot be undone.\n\nAre you sure you want to proceed?')) return;
+
+        try {
+            const res = await fetch('/api/admin/cleanup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ days: 0 }) // 0 days means delete all
+            });
+            if (res.ok) {
+                const data = await res.json();
+                alert(`✅ Successfully deleted ${data.deletedCount} orders.`);
+                fetchData();
+            } else {
+                alert('❌ Failed to delete orders.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('❌ Error deleting orders.');
+        }
+    };
+
     const handleSaveItem = async (e: React.FormEvent) => {
         e.preventDefault();
         const item = {
@@ -593,7 +615,20 @@ export default function AdminDashboard() {
                     </div>
 
                     <div style={{ borderTop: '1px solid #333', paddingTop: '2rem' }}>
-                        <h3 style={{ marginBottom: '1rem', color: '#F44336' }}>Danger Zone: Delete Category</h3>
+                        <h3 style={{ marginBottom: '1rem', color: '#F44336' }}>Danger Zone</h3>
+
+                        <div style={{ marginBottom: '2rem' }}>
+                            <p style={{ color: '#888', marginBottom: '0.5rem' }}>Delete all order history from the database. This is useful for clearing test data.</p>
+                            <button
+                                className="btn btn-secondary"
+                                style={{ borderColor: 'red', color: 'red', fontWeight: 'bold' }}
+                                onClick={handleClearAllOrders}
+                            >
+                                🗑️ Clear All Order History
+                            </button>
+                        </div>
+
+                        <h4 style={{ marginBottom: '1rem', color: '#F44336' }}>Delete Category</h4>
                         <p style={{ color: '#888', marginBottom: '1rem' }}>Deleting a category will <strong>permanently delete all menu items</strong> within it.</p>
 
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
