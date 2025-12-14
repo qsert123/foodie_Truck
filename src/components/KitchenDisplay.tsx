@@ -5,8 +5,7 @@ import { Order } from '@/lib/types';
 
 export default function KitchenDisplay() {
     const [orders, setOrders] = useState<Order[]>([]);
-    const [prevOrderCount, setPrevOrderCount] = useState(0);
-
+    const knownOrderIds = useRef<Set<string>>(new Set());
     const isFirstLoad = useRef(true);
 
     useEffect(() => {
@@ -19,22 +18,29 @@ export default function KitchenDisplay() {
         try {
             const res = await fetch('/api/orders');
             if (res.ok) {
-                const data = await res.json();
+                const data: Order[] = await res.json();
                 console.log('Fetched orders:', data);
+
+                // Sort by createdAt desc (newest first)
+                data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
                 if (isFirstLoad.current) {
                     isFirstLoad.current = false;
-                    setPrevOrderCount(data.length);
+                    data.forEach(o => knownOrderIds.current.add(o.id));
                 } else {
-                    // Play sound if new orders arrived
-                    if (data.length > prevOrderCount) {
+                    // Check for ANY new order that wasn't there before
+                    const hasNewOrder = data.some(o => !knownOrderIds.current.has(o.id));
+
+                    if (hasNewOrder) {
                         const audio = new Audio('https://codeskulptor-demos.commondatastorage.googleapis.com/pang/pop.mp3');
                         audio.play().catch(e => console.error("Audio play failed", e));
                     }
+
+                    // Update known IDs
+                    data.forEach(o => knownOrderIds.current.add(o.id));
                 }
 
                 setOrders(data);
-                setPrevOrderCount(data.length);
             } else {
                 console.error('Failed to fetch orders:', res.status, res.statusText);
             }
@@ -59,7 +65,7 @@ export default function KitchenDisplay() {
             {orders.map(order => (
                 <div key={order.id} className="card" style={{ borderLeft: `4px solid ${order.status === 'ready' ? '#4CAF50' : order.status === 'cancelled' ? '#F44336' : '#FFC107'}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                        <h3 style={{ margin: 0 }}>#{order.id.slice(-4)}</h3>
+                        <h3 style={{ margin: 0 }}>#{order.formattedOrderId || order.id.slice(-4)}</h3>
                         <span style={{
                             background: order.status === 'ready' ? '#4CAF50' : order.status === 'cancelled' ? '#F44336' : '#FFC107',
                             color: '#000',

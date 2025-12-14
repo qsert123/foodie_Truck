@@ -15,6 +15,7 @@ export default function OrderForm({ menu }: OrderFormProps) {
     const [submitted, setSubmitted] = useState(false);
 
     const [lastOrderTotal, setLastOrderTotal] = useState(0);
+    const [lastOrderId, setLastOrderId] = useState('');
 
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -62,7 +63,11 @@ export default function OrderForm({ menu }: OrderFormProps) {
         });
 
         if (res.ok) {
+            const data = await res.json();
             setLastOrderTotal(currentTotal);
+            if (data.order && data.order.formattedOrderId) {
+                setLastOrderId(data.order.formattedOrderId);
+            }
             setSubmitted(true);
             clearCart();
             setName('');
@@ -75,6 +80,11 @@ export default function OrderForm({ menu }: OrderFormProps) {
         return (
             <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
                 <h2 style={{ color: 'var(--primary)', marginBottom: '1rem' }}>Order Placed!</h2>
+                {lastOrderId && (
+                    <h3 style={{ color: 'var(--primary)', fontSize: '2rem', marginBottom: '1rem', border: '2px dashed var(--primary)', display: 'inline-block', padding: '0.5rem 1rem', borderRadius: '8px' }}>
+                        Order #{lastOrderId}
+                    </h3>
+                )}
                 <div style={{ fontSize: '1.2rem', marginBottom: '1.5rem' }}>
                     <p style={{ marginBottom: '0.5rem' }}>Total to Pay: <strong style={{ color: 'var(--primary)', fontSize: '1.5rem' }}>₹{lastOrderTotal}</strong></p>
                     <p style={{ color: '#888', fontSize: '1rem' }}>Please pick up your order from the truck and pay cash.</p>
