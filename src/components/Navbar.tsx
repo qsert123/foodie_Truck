@@ -26,14 +26,10 @@ export default function Navbar() {
         <nav className={styles.navbar}>
             <div className={styles.container}>
                 <Link href="/" className={styles.logo}>
-                    <span className={styles.logoIcon}>🍽️</span>
-                    <span className={styles.logoText} style={{ fontSize: '2rem', fontFamily: '"Transcity", "Brush Script MT", cursive' }}>
-                        Foodie
-                    </span>
+                    <img src="/logo.png" alt="Broast N Bakes" className={styles.logoImage} style={{ height: '50px', width: 'auto' }} />
                 </Link>
                 <div className={styles.links}>
-                    <Link href="/" className={styles.link}>Home</Link>
-                    <Link href="/menu" className={styles.link}>Menu</Link>
+                    <Link href="/" className={styles.link}>Menu</Link>
                     <Link href="/order" className={styles.link}>
                         <span className="desktop-only">Order Now</span>
                         <span className="mobile-only">Order</span>

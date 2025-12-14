@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc } from "firebase/firestore";
 import data from "../lib/data.json";
 import dotenv from "dotenv";
 import path from "path";
@@ -29,15 +29,16 @@ async function checkAndSeed() {
     try {
         console.log("Checking database connection...");
 
-        // Check if Menu collection exists/has data
+        // Clear existing Menu
+        console.log("Cleaning up old menu items...");
         const menuSnap = await getDocs(collection(db, "menu"));
         if (!menuSnap.empty) {
-            console.log("✅ Firestore already has data (menu). No seeding needed.");
-            // You can uncomment the return if you want to skip seeding when data exists
-            // return; 
-            console.log("ℹ️ Proceeding to overwrite/update data anyway (as per request)...");
+            console.log(`Found ${menuSnap.size} existing items. Deleting...`);
+            const deletePromises = menuSnap.docs.map(d => deleteDoc(doc(db, "menu", d.id)));
+            await Promise.all(deletePromises);
+            console.log("✅ Cleared old menu items.");
         } else {
-            console.log("⚠️ Firestore (menu) is empty. Seeding now...");
+            console.log("Menu collection is clean.");
         }
 
         // Seed Menu
